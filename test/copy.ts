@@ -12,16 +12,13 @@ import {
 import {
     FeeMintable,
     FeeMintable__factory,
-    Copy,
-    Copy__factory,
-    Creator,
-    Creator__factory,
+    ERC721Copy,
+    ERC721Copy__factory,
+    MockNFT,
+    MockNFT__factory,
     MockFT,
     MockFT__factory
 } from "../typechain-types";
-
-
-
 
 describe('COPY Contract', () => {
   
@@ -32,8 +29,8 @@ describe('COPY Contract', () => {
     let addrs: SignerWithAddress[];
 
     let mintableContract: FeeMintable;
-    let creatorContract: Creator;
-    let copyContract: Copy;
+    let creatorContract: MockNFT;
+    let copyContract: ERC721Copy;
     let mockFT: MockFT;
 
     before(async function () {
@@ -43,10 +40,10 @@ describe('COPY Contract', () => {
         mintableContract = await new FeeMintable__factory(owner).deploy();
 
         // deploy creator contract
-        creatorContract = await new Creator__factory(owner).deploy("Creator", "CTR");
+        creatorContract = await new MockNFT__factory(owner).deploy("Creator", "CTR");
 
         // deploy copy contract
-        copyContract = await new Copy__factory(owner).deploy("Copy", "CPY", creatorContract.address);
+        copyContract = await new ERC721Copy__factory(owner).deploy("Copy", "CPY", creatorContract.address);
 
         // deploy mock ERC20 contract
         mockFT = await new MockFT__factory(owner).deploy("MOCK_USDT", "MUSDT");
@@ -93,7 +90,7 @@ describe('COPY Contract', () => {
             await mockFT.connect(addr2).approve(mintableContract.address, 10000000000);
             
             // get a copy
-            await copyContract.connect(addr2).create(
+            await copyContract.connect(addr2).copy(
                 addr2.address, 
                 {
                     creatorId: 1, // creatorId

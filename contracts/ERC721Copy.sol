@@ -4,10 +4,13 @@ pragma solidity 0.8.10;
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 
-import './IERC721Copy.sol';
-import './IMintable.sol';
+import './ERC721Copy/IERC721Copy.sol';
+import './ERC721Copy/IMintable.sol';
 
-abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
+/**
+ * @notice This is an implementation of the IERC721Copy interface.
+ */
+contract ERC721Copy is ERC721Enumerable, IERC721Copy {
     uint64 private constant MAX_UINT64 = 0xffffffffffffffff;
     address internal _creatorContract;
 
@@ -32,23 +35,20 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
      * @param creatorContract_ The NFT contract of the creator NFT
      *
      */
-    constructor (address creatorContract_) {
+    constructor (
+        string memory name_, 
+        string memory symbol_,
+        address creatorContract_
+    ) ERC721(name_, symbol_) {
         _creatorContract = creatorContract_;
     }
 
-    /**
-     * @notice The creator who holds a creator token can set a mintable rule that enables others
-     * to mint copies given that they fulfil the conditions specified by the rule
-     *
-     * @param creatorId the tokenId of the creator NFT
-     * @param mintable the address of the mintable rule
-     * @param mintableInitData the data to be input into the mintable address for setup rules
-     */
-    function _setMintableRule(
+    /// @inheritdoc IERC721Copy
+    function setMintableRule(
         uint256 creatorId,
         address mintable,
         bytes calldata mintableInitData
-    ) internal {
+    ) external virtual override {
         require(
             _isApprovedOrCreator(_msgSender(), creatorId),
             'ERC721Copy: caller is not creator nor approved'
@@ -59,15 +59,8 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
         }
     }
 
-    /**
-     * @dev Mint a copy of a creator token which has a mintable rule set
-     *
-     * @param to address of copy token receiver
-     * @param mintInfo See {IMintable-MintInfo}
-     *
-     * @return uint256 Returns the newly minted tokenId
-     */
-    function _copy(address to, IMintable.MintInfo calldata mintInfo) internal returns (uint256) {
+    /// @inheritdoc IERC721Copy
+    function copy(address to, IMintable.MintInfo calldata mintInfo) external virtual override returns (uint256) {
         address mintAddress = _mintableRules[mintInfo.creatorId];
         require(mintAddress != address(0), 'ERC721Copy: No Mintable Rule');
         IMintable(mintAddress).isMintable(to, mintInfo);
@@ -78,14 +71,8 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
         return tokenId;
     }
 
-    /**
-     * @dev The creator can revoke the ownership of the copy NFT if isRevokable returns true
-     * see {IERC721Copy-isRevokable}
-     *
-     * @param tokenId the copy nft tokenId to be revoked by the creator
-     *
-     */
-    function _revoke(uint256 tokenId) internal {
+    /// @inheritdoc IERC721Copy
+    function revoke(uint256 tokenId) external virtual override  {
         require(isRevokable(tokenId), 'ERC721Copy: Non-revokable');
         require(
             _isApprovedOrCreator(_msgSender(), creatorOf(tokenId)),
@@ -94,14 +81,8 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
         _deregisterAndBurn(tokenId);
     }
 
-    /**
-     * @dev The copy NFT owner can destroy the copy NFT anytime he/she wants. The destroy function
-     * works also for expired tokens
-     *
-     * @param tokenId the copy nft tokenId to be revoked by the creator
-     *
-     */
-    function _destroy(uint256 tokenId) internal {
+    /// @inheritdoc IERC721Copy
+    function destroy(uint256 tokenId) external virtual override {
         require(
             _isApprovedOrHolder(_msgSender(), tokenId),
             'ERC721Copy: caller is not token holder nor approved'
@@ -109,22 +90,12 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
         _deregisterAndBurn(tokenId);
     }
 
-    /**
-     * @dev The copy NFT owner can extend the copy NFT anytime he/she wants. Extension of the token's
-     * expiry timestamp should subject to the conditions specified in the mintable rule set by the
-     * creator
-     *
-     * @param tokenId the copy nft tokenId to be revoked by the creator
-     * @param duration the duration to be extended
-     * @param data the additional data required to pass the isExtendable function. It will be abi.decoded
-     * into the respective variables in {IMintable-isExtendable}
-     *
-     */
-    function _extend(
+    /// @inheritdoc IERC721Copy
+    function extend(
         uint256 tokenId,
         uint64 duration,
         bytes calldata data
-    ) internal virtual returns (uint64) {
+    ) external virtual override returns (uint64) {
         require(isExtendable(tokenId), 'ERC721Copy: Non-extendable');
         IMintable(_copyInfo[tokenId].extendAt).isExtendable(
             holderOf(tokenId),
@@ -149,14 +120,8 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
         return _copyInfo[tokenId].expireAt;
     }
 
-    /**
-     * @dev The copy NFT owner can update the copy NFT if the NFT is updatable. The update function
-     * should stop functioning once the token is expired
-     *
-     * @param tokenId the copy nft tokenId to be revoked by the creator
-     *
-     */
-    function _update(uint256 tokenId) internal returns (string memory) {
+    /// @inheritdoc IERC721Copy
+    function update(uint256 tokenId) external virtual override returns (string memory) {
         require(isUpdatable(tokenId), 'ERC721Copy: Non-updatable');
         require(
             _isApprovedOrOwner(_msgSender(), tokenId),
@@ -295,7 +260,7 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
     function _add(uint64 a, uint64 b) internal pure returns (uint64) {
         return MAX_UINT64 - a < b ? MAX_UINT64 : a + b;
     }
-
+    
     /**
      * @dev See {IERC165-supportsInterface}.
      */
@@ -342,22 +307,32 @@ abstract contract ERC721Copy is ERC721Enumerable, IERC721Copy {
         return _creatorContract;
     }
 
-    /// @inheritdoc IERC721Copy
-    function getTokenCount() external view virtual override returns (uint256) {
+    /**
+     * @return uint256 Returns the total number of minted copy NFT tokens
+     */
+    function getTokenCount() external view virtual returns (uint256) {
         return _copyIds.current();
     }
 
-    /// @inheritdoc IERC721Copy
-    function getCopyCount(uint256 creatorId) external view virtual override returns (uint256) {
+    /**
+     * @param creatorId The creator NFT token Id
+     *
+     * @return uint256 Returns the total number of copy NFT tokens minted based on a particular creator NFT token
+     */
+    function getCopyCount(uint256 creatorId) external view virtual returns (uint256) {
         return _copyCount[creatorId];
     }
 
-    /// @inheritdoc IERC721Copy
+    /**
+     * @param creatorId The creator NFT token Id
+     * @param index The index of the list of copy NFTs minted based on the creatorId, index starts from 1
+     *
+     * @return uint256 Returns the copy NFT tokenId of a particular creator NFT token
+     */
     function getCopyByIndex(uint256 creatorId, uint256 index)
         external
         view
         virtual
-        override
         returns (uint256)
     {
         require(index < _copyCount[creatorId], 'ERC721Copy: Index Out Of Bounds');

@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-
 import './ERC721Copy/IMintable.sol';
 import './ERC721Copy/IERC721Copy.sol';
+
+interface IERC721 {
+    function ownerOf(uint256 tokenId) external view returns (address owner);
+}
 
 interface IERC20 {
     function transferFrom(
@@ -54,9 +56,9 @@ enum State {
 }
 
 /**
- * @notice This contract is used to enable mintable and extending a token with a fee charged. The 
- * creator will need to setup rules for copier/collector to follow before a copy token is minted / 
- * extended. 
+ * @notice This contract is an implementation of the IMintable interface. It is used to enable mintable 
+ * and extending a token with a fee charged. The creator will need to setup rules for copier/collector 
+ * to follow before a copy token is minted / extended. 
  * 
  */
 contract FeeMintable is IMintable {
@@ -67,10 +69,12 @@ contract FeeMintable is IMintable {
         MintData[] mintData,
         FeeInfo[] feeInfo
     );
-
-    // address => creatorId => RuleData[]
-    // the address is the copy contract address, which is also the msg.sender to this contract
-    // the creatorId, is the tokenId of the creator contract
+    
+    /**
+     * @notice address => creatorId => RuleData[]
+     * The address is the copy contract address, which is also the msg.sender to this contracts
+     * The creatorId, is the tokenId of the creator contract
+     */
     mapping(address => mapping(uint256 => bytes32[])) private _copyRules;
     mapping(bytes32 => State) private _states;
 

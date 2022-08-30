@@ -7,8 +7,8 @@ import '@openzeppelin/contracts/utils/Counters.sol';
 /**
  * @notice This is one example of an abitrary NFT contract that has a function of getting the tokenURI.
  */
-contract Creator is ERC721Enumerable {
-
+contract MockNFT is ERC721Enumerable {
+    
     using Strings for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;

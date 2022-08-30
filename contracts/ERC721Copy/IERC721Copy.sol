@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.10;
 
+import './IMintable.sol';
+
+/**
+ * @notice The Interface of ERC721Copy Contract. Creator can use the setMintableRule to specify the condition for minting
+ * the copy. Depending on the mintable rules, collector can copy, then update, transfer, extend or destroy the copy. Creator 
+ * can revoke the copy if allowed in mintable rules. This interface is intended to be used for single creator NFT contract. 
+ * It can be easily extended to accept request from multiple create NFT contracts.
+ */
 interface IERC721Copy {
     /**
      * @notice Struct containing the information of the minted copy NFT
@@ -30,29 +38,81 @@ interface IERC721Copy {
     }
 
     /**
+     * @notice The creator who holds a creator token can set a mintable rule that enables others
+     * to mint copies given that they fulfil the conditions specified by the rule
+     *
+     * @param creatorId the tokenId of the creator NFT
+     * @param mintable the address of the mintable rule
+     * @param mintableInitData the data to be input into the mintable address for setup rules
+     */
+    function setMintableRule(
+        uint256 creatorId,
+        address mintable,
+        bytes calldata mintableInitData
+    ) external;
+
+    /**
+     * @dev Mint a copy of a creator token which has a mintable rule set
+     *
+     * @param to address of copy token receiver
+     * @param mintInfo See {IMintable-MintInfo}
+     *
+     * @return uint256 Returns the newly minted tokenId
+     */
+    function copy(
+        address to, 
+        IMintable.MintInfo calldata mintInfo
+    ) external returns (uint256);
+
+    /**
+     * @dev The creator can revoke the ownership of the copy NFT if isRevokable returns true
+     * see {IERC721Copy-isRevokable}
+     *
+     * @param tokenId the copy nft tokenId to be revoked by the creator
+     *
+     */
+    function revoke(uint256 tokenId) external;
+
+    /**
+     * @dev The copy NFT owner can destroy the copy NFT anytime he/she wants. The destroy function
+     * works also for expired tokens
+     *
+     * @param tokenId the copy nft tokenId to be revoked by the creator
+     *
+     */
+    function destroy(uint256 tokenId) external;
+
+
+    /**
+     * @dev The copy NFT owner can extend the copy NFT anytime he/she wants. Extension of the token's
+     * expiry timestamp should subject to the conditions specified in the mintable rule set by the
+     * creator
+     *
+     * @param tokenId the copy nft tokenId to be revoked by the creator
+     * @param duration the duration to be extended
+     * @param data the additional data required to pass the isExtendable function. It will be abi.decoded
+     * into the respective variables in {IMintable-isExtendable}
+     *
+     */
+    function extend(
+        uint256 tokenId,
+        uint64 duration,
+        bytes calldata data
+    ) external returns (uint64);
+
+    /**
+     * @dev The copy NFT owner can update the copy NFT if the NFT is updatable. The update function
+     * should stop functioning once the token is expired
+     *
+     * @param tokenId the copy nft tokenId to be revoked by the creator
+     *
+     */    
+    function update(uint256 tokenId) external returns (string memory);
+
+    /**
      * @return address Returns the address of the creator NFT contract
      */
     function getCreatorContract() external view returns (address);
-
-    /**
-     * @return uint256 Returns the total number of minted copy NFT tokens
-     */
-    function getTokenCount() external view returns (uint256);
-
-    /**
-     * @param creatorId The creator NFT token Id
-     *
-     * @return uint256 Returns the total number of copy NFT tokens minted based on a particular creator NFT token
-     */
-    function getCopyCount(uint256 creatorId) external view returns (uint256);
-
-    /**
-     * @param creatorId The creator NFT token Id
-     * @param index The index of the list of copy NFTs minted based on the creatorId, index starts from 1
-     *
-     * @return uint256 Returns the copy NFT tokenId of a particular creator NFT token
-     */
-    function getCopyByIndex(uint256 creatorId, uint256 index) external view returns (uint256);
 
     /**
      * @notice The copy NFT is transferable if its transferable parameter is true and it has not expired
@@ -98,8 +158,6 @@ interface IERC721Copy {
     function isExpired(uint256 tokenId) external view returns (bool);
 
     /**
-     * @dev See {IERC721-ownerOf}.
-     *
      * @notice This function calls the IERC721 ownerOf function. It returns the token owner regardless of whether
      * the token is currently expired.
      *

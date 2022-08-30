@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.10;
 
+/**
+ * @notice This is the interface of the Mintable Contract, the mintable contract specifies the rule for minting copies. 
+ * Contracts that inherit the IMintable Interface can define their own rules. The creator will first specifies rules 
+ * using the setupRule function. Then, the collector can mint a copy with the isMintable function, or subsequently extend
+ * the validity of the copy with the isExtendable function.
+ */
 interface IMintable {
     /**
      * @notice mintInfo struct that specifies the input to the minting function
