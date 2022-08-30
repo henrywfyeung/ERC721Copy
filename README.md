@@ -12,7 +12,7 @@ requires (*optional): 165, 721
 ---
 
 ## Abstract
-This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as a master copy that conditionally allows the production of replicatas with a specific copyright delegation valid within a fixed time period. 
+This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as a master copy that conditionally allows the production of replicas with a specific copyright delegation valid within a fixed time period. 
 
 The Creator, who holds the master copy, can set up Mintable rules specifying the condition of minting, the condition of extending and the states of the minted copy.
 
