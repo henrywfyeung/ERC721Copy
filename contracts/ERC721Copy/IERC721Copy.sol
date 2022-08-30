@@ -11,7 +11,7 @@ import './IMintable.sol';
  */
 interface IERC721Copy {
     /**
-     * @notice Struct containing the information of the minted copy NFT
+     * @dev Struct containing the information of the minted copy NFT
      *
      * @param creatorId The tokenId of the creator NFT that produces the original content
      * @param extendAt The contract address that the user can go to when extending the expiration timestemp
@@ -38,7 +38,7 @@ interface IERC721Copy {
     }
 
     /**
-     * @notice The creator who holds a creator token can set a mintable rule that enables others
+     * @dev The creator who holds a creator token can set a mintable rule that enables others
      * to mint copies given that they fulfil the conditions specified by the rule
      *
      * @param creatorId the tokenId of the creator NFT
@@ -115,7 +115,7 @@ interface IERC721Copy {
     function getCreatorContract() external view returns (address);
 
     /**
-     * @notice The copy NFT is transferable if its transferable parameter is true and it has not expired
+     * @dev The copy NFT is transferable if its transferable parameter is true and it has not expired
      *
      * @param tokenId The copy NFT token Id
      *
@@ -124,7 +124,7 @@ interface IERC721Copy {
     function isTransferable(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice The copy NFT is updatable if its updatable parameter is true and it has not expired
+     * @dev The copy NFT is updatable if its updatable parameter is true and it has not expired
      *
      * @param tokenId The copy NFT token Id
      *
@@ -133,7 +133,7 @@ interface IERC721Copy {
     function isUpdatable(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice The copy NFT is revokable if its revokable parameter is true or it has expired
+     * @dev The copy NFT is revokable if its revokable parameter is true or it has expired
      *
      * @param tokenId The copy NFT token Id
      *
@@ -142,7 +142,7 @@ interface IERC721Copy {
     function isRevokable(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice The copy NFT is extendable if its extendable parameter is true
+     * @dev The copy NFT is extendable if its extendable parameter is true
      *
      * @param tokenId The copy NFT token Id
      *
@@ -158,7 +158,7 @@ interface IERC721Copy {
     function isExpired(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice This function calls the IERC721 ownerOf function. It returns the token owner regardless of whether
+     * @dev This function calls the IERC721 ownerOf function. It returns the token owner regardless of whether
      * the token is currently expired.
      *
      * @param tokenId The copy NFT tokenId

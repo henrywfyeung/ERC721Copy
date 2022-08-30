@@ -9,7 +9,7 @@ pragma solidity 0.8.10;
  */
 interface IMintable {
     /**
-     * @notice mintInfo struct that specifies the input to the minting function
+     * @dev mintInfo struct that specifies the input to the minting function
      *
      * @param creatorId The tokenId of the creator NFT that produces the original content
      * @param duration The time duration that should add to the NFT token after mint
@@ -33,7 +33,7 @@ interface IMintable {
     }
 
     /**
-     * @notice Sets up the mintable rule by the creator NFT's tokenId and the ruleData. This function will
+     * @dev Sets up the mintable rule by the creator NFT's tokenId and the ruleData. This function will
      * decode the ruleData back to the required parameters and sets up the mintable rule that decides who
      * can or cannot mint a copy of the creator's NFT content, with the corresponding parameters, such as
      * transferable, updatable etc. see {IMintable-MintInfo}
@@ -44,7 +44,7 @@ interface IMintable {
     function setupRule(uint256 creatorId, bytes calldata ruleData) external;
 
     /**
-     * @notice Supply the data that will be used to passed the mintable rule setup by the creator. Different
+     * @dev Supply the data that will be used to passed the mintable rule setup by the creator. Different
      * rule has different requirement
      *
      * @param to the address that the NFT will be minted to
@@ -53,7 +53,7 @@ interface IMintable {
     function isMintable(address to, MintInfo calldata mintInfo) external;
 
     /**
-     * @notice Supply the the expiry date of the NFT and data that will be used to passed the mintable rule setup
+     * @dev Supply the the expiry date of the NFT and data that will be used to passed the mintable rule setup
      * by the creator. Different rule has different requirement. Once pass the NFT expiry will be extended by the
      * specific duration
      *

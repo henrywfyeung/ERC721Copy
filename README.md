@@ -12,7 +12,7 @@ requires (*optional): 165, 721
 ---
 
 ## Abstract
-This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any [EIP-721] compliant contracts with metadata extension, to work as a master copy that conditionally allows the production of replicatas with a specific copyright delegation valid within a fixed time period. 
+This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as a master copy that conditionally allows the production of replicatas with a specific copyright delegation valid within a fixed time period. 
 
 The Creator, who holds the master copy, can set up Mintable rules specifying the condition of minting, the condition of extending and the states of the minted copy.
 
@@ -37,21 +37,21 @@ This standard consists of a Copy Contract and a Mintable Contract. They together
 
 ### Deployment
 
-The Creator Contract MUST be [EIP-721](./eip-721.md) Compliant.
-The Creator Contract MUST immplement the **metadata extension** specified in [EIP-721](./eip-721.md).
-The Creator Token Holder MUST be process the copyright of the content that permits the issuing of the copy NFT.
-The Copy Contract MUST work with any Creator Contract.
+- The Creator Contract MUST be [EIP-721](./eip-721.md) Compliant.
+- The Creator Contract MUST immplement the **metadata extension** specified in [EIP-721](./eip-721.md).
+- The Creator Token Holder MUST be process the copyright of the content that permits the issuing of the copy NFT.
+- The Copy Contract MUST work with any Creator Contract.
 
 ### Usage
 
-The token holder of the Creator Contract MAY set the mintable rule in the Copy Contract to specify the condition of mint a particular copy.
-The mintable rule SHOULD call a particular implementation of Mintable Contract and set rules inside the Mintable Contract.
-The creator MAY specifies states of the copy, such as transferable, extendable, revokable, updateable, statement in the Contract.
+- The token holder of the Creator Contract MAY set the mintable rule in the Copy Contract to specify the condition of mint a particular copy.
+- The mintable rule SHOULD call a particular implementation of Mintable Contract and set rules inside the Mintable Contract.
+- The creator MAY specifies states of the copy, such as transferable, extendable, revokable, updateable, statement in the Contract.
 
-The Collector MUST fulfil the rules set by the Creator to obtain a copy.
-The Collector MAY excecise the right specfied by the Creator, such as transferable, extendable, revokable, updateable, and the copyright in the statement.
-The Collector SHOULD always reserve the right to destroy a copy.
-The Creator MAY revoke a copy if the state revokable of the copy is true.
+- The Collector MUST fulfil the rules set by the Creator to obtain a copy.
+- The Collector MAY excecise the right specfied by the Creator, such as transferable, extendable, revokable, updateable, and the copyright - in the statement.
+- The Collector SHOULD always reserve the right to destroy a copy.
+- The Creator MAY revoke a copy if the state revokable of the copy is true.
 
 ## Rationale
 
@@ -99,7 +99,7 @@ import './IMintable.sol';
  */
 interface IERC721Copy {
     /**
-     * @notice Struct containing the information of the minted copy NFT
+     * @dev Struct containing the information of the minted copy NFT
      *
      * @param creatorId The tokenId of the creator NFT that produces the original content
      * @param extendAt The contract address that the user can go to when extending the expiration timestemp
@@ -126,7 +126,7 @@ interface IERC721Copy {
     }
 
     /**
-     * @notice The creator who holds a creator token can set a mintable rule that enables others
+     * @dev The creator who holds a creator token can set a mintable rule that enables others
      * to mint copies given that they fulfil the conditions specified by the rule
      *
      * @param creatorId the tokenId of the creator NFT
@@ -203,7 +203,7 @@ interface IERC721Copy {
     function getCreatorContract() external view returns (address);
     
     /**
-     * @notice The copy NFT is transferable if its transferable parameter is true and it has not expired
+     * @dev The copy NFT is transferable if its transferable parameter is true and it has not expired
      *
      * @param tokenId The copy NFT token Id
      *
@@ -212,7 +212,7 @@ interface IERC721Copy {
     function isTransferable(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice The copy NFT is updatable if its updatable parameter is true and it has not expired
+     * @dev The copy NFT is updatable if its updatable parameter is true and it has not expired
      *
      * @param tokenId The copy NFT token Id
      *
@@ -221,7 +221,7 @@ interface IERC721Copy {
     function isUpdatable(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice The copy NFT is revokable if its revokable parameter is true or it has expired
+     * @dev The copy NFT is revokable if its revokable parameter is true or it has expired
      *
      * @param tokenId The copy NFT token Id
      *
@@ -230,7 +230,7 @@ interface IERC721Copy {
     function isRevokable(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice The copy NFT is extendable if its extendable parameter is true
+     * @dev The copy NFT is extendable if its extendable parameter is true
      *
      * @param tokenId The copy NFT token Id
      *
@@ -246,7 +246,7 @@ interface IERC721Copy {
     function isExpired(uint256 tokenId) external view returns (bool);
 
     /**
-     * @notice This function calls the IERC721 ownerOf function. It returns the token owner regardless of whether
+     * @dev This function calls the IERC721 ownerOf function. It returns the token owner regardless of whether
      * the token is currently expired.
      *
      * @param tokenId The copy NFT tokenId
@@ -297,7 +297,7 @@ pragma solidity 0.8.10;
  */
 interface IMintable {
     /**
-     * @notice mintInfo struct that specifies the input to the minting function
+     * @dev mintInfo struct that specifies the input to the minting function
      *
      * @param creatorId The tokenId of the creator NFT that produces the original content
      * @param duration The time duration that should add to the NFT token after mint
@@ -321,7 +321,7 @@ interface IMintable {
     }
 
     /**
-     * @notice Sets up the mintable rule by the creator NFT's tokenId and the ruleData. This function will
+     * @dev Sets up the mintable rule by the creator NFT's tokenId and the ruleData. This function will
      * decode the ruleData back to the required parameters and sets up the mintable rule that decides who
      * can or cannot mint a copy of the creator's NFT content, with the corresponding parameters, such as
      * transferable, updatable etc. see {IMintable-MintInfo}
@@ -332,7 +332,7 @@ interface IMintable {
     function setupRule(uint256 creatorId, bytes calldata ruleData) external;
 
     /**
-     * @notice Supply the data that will be used to passed the mintable rule setup by the creator. Different
+     * @dev Supply the data that will be used to passed the mintable rule setup by the creator. Different
      * rule has different requirement
      *
      * @param to the address that the NFT will be minted to
@@ -341,7 +341,7 @@ interface IMintable {
     function isMintable(address to, MintInfo calldata mintInfo) external;
 
     /**
-     * @notice Supply the the expiry date of the NFT and data that will be used to passed the mintable rule setup
+     * @dev Supply the the expiry date of the NFT and data that will be used to passed the mintable rule setup
      * by the creator. Different rule has different requirement. Once pass the NFT expiry will be extended by the
      * specific duration
      *
