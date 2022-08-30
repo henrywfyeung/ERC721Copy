@@ -12,7 +12,7 @@ requires (*optional): 165, 721
 ---
 
 ## Abstract
-This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as a master copy that conditionally allows the production of replicas with a specific copyright delegation valid within a fixed time period. 
+This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as a master copy that conditionally allows the production of replicas with specific copyright delegation valid within a fixed time period. 
 
 The Creator, who holds the master copy, can set up Mintable rules specifying the condition of minting, the condition of extending and the states of the minted copy.
 
@@ -21,12 +21,12 @@ The Collector, upon obtaining the token, will be able to use the token within th
 ## Motivation
 This standard solves the following problems
 
-- Copy Issuance of Unique Arkwork/Content: Professional Artists create arkworks that is unique. There could be multiple collectors who wants to keep a copy of their artworks. This standard serves as a tool to issue multiple copies of the same kind. The copies can be created with different function and under different conditions. It gives sufficient flexibilty to both the creator and the collector.
-- Partial Copyright Transfer: This standard enables creators to conditionally delegate the copyright, i.e. the right to produce derivative work, to the holders of the copy token. There is no need to sell the master copy, i.e. creator token, to the market. The creator can instead keep the token as a proof of authorship.
+- Copy Issuance of Unique Arkwork/Content: Professional Artists create arkworks that is unique. There could be multiple collectors who wants to keep a copy of their artworks. This standard serves as a tool to issue multiple copies of the same kind. The copies can be created with different functions and under different conditions. It gives sufficient flexibilty to both the Creator and the Collector.
+- Partial Copyright Transfer: This standard enables Creators to conditionally delegate the copyright, i.e. the right to produce derivative work, to the Collectors. There is no need to sell the master copy, i.e. creator token, in the market. The Creator can instead keep the token as a proof of authorship.
 
 People with the following usecases can consider applying this standard:
 - Creator of any unique Art/Music NFTs can use this standard to sell copies to audiences. With this standard, they can retain some control over the copies.
-- Artists can use ERC721Copy to sell time-limited copies of their artwork to other artists with a copyright statement that enables the production of derivative work
+- Artists can use this standard to sell time-limited copies of their artwork to other artists with a copyright statement that enables the production of derivative work
 - Universities can create Graduation Certificates as NFTs and use this standard to mint a batch of non-transferable issues to their students. The Univerity retains the right to revoke any issued certificates.
 
 
@@ -55,7 +55,7 @@ This standard consists of a Copy Contract and a Mintable Contract. They together
 
 ## Rationale
 
-This standard is designed to be as flexible as possible so that it can filful as much need as possible. 
+This standard is designed to be as flexible as possible so that it can fulfil as much need as possible. 
 
 The Copy Contract permits minting of tokens that process the following charateristics:
 - non-transferable: An SBT that is bound to a user's wallet address
