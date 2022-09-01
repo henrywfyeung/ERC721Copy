@@ -1,7 +1,7 @@
 ---
 eip: <to be assigned>
 title: Conditional Copy NFT
-description: NFT Copy Creation under conditions specfied by the creator
+description: NFT Copy Creation under conditions specified by the creator
 author: Henry Yeung (@henrywfyeung), Xiao Ba <99x.capital@gmail.com>
 discussions-to: <URL>
 status: Draft
@@ -12,19 +12,19 @@ requires (*optional): 165, 721
 ---
 
 ## Abstract
-This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as an original copy that conditionally allows the production of replicas with specific copyright delegation valid within a fixed time period. 
+This standard is an extension of [EIP-721](./eip-721.md). This standard enables a creator token, i.e. token from any EIP-721 compliant contracts with metadata extension, to work as an original copy that conditionally allows the production of replicas with specific copyright delegation valid within a fixed duration. 
 
-The Creator, who holds the original copy, can set up Mintable rules specifying the condition of minting, the condition of extending and the states of the minted copy.
+The Creator, who holds the original copy, can set up Mintable rules specifying the condition of minting, the condition of extending, and the states of the minted copy.
 
 The Collector, upon obtaining the token, will be able to use the token within the boundaries set by the creator.
 
 ## Motivation
 This standard solves the following problems
 
-- Copy Issuance of Unique Artwork/Content: Professional Artists create arkworks that is unique. There could be multiple collectors who wants to keep a copy of their artworks. This standard serves as a tool to issue multiple copies of the same kind. The copies can be created with different functions and under different conditions. It gives sufficient flexibilty to both the Creator and the Collector.
-- Partial Copyright Transfer: This standard enables Creators to conditionally delegate the copyright, i.e. the right to produce derivative work, to the Collectors. There is no need to sell the original copy, i.e. creator token, in the market. The Creator can instead keep the token as a proof of authorship.
+- Copy Issuance of Unique Artwork/Content: Artists create unique artworks. There could be multiple collectors who want to keep a copy of their artworks. This standard serves as a tool to issue multiple copies of the same kind. The copies can be created with different functions and under different conditions. It gives sufficient flexibility to both the Creator and the Collector.
+- Partial Copyright Transfer: This standard enables Creators to conditionally delegate the copyright, i.e. the right to produce derivative work, to the Collectors. There is no need to sell the original copy, i.e. creator token, in the market. The Creator can instead keep the token as proof of authorship.
 
-People with the following usecases can consider applying this standard:
+People with the following use cases can consider applying this standard:
 - Creator of any unique Art/Music NFTs can use this standard to sell copies to audiences. With this standard, they can retain some control over the copies.
 - Artists can use this standard to sell time-limited copies of their artwork to other artists with a copyright statement that enables the production of derivative work
 - Universities can create Graduation Certificates as NFTs and use this standard to mint a batch of non-transferable issues to their students. The Univerity retains the right to revoke any issued certificates.
@@ -38,33 +38,33 @@ This standard consists of a Copy Contract and a Mintable Contract. They together
 ### Deployment
 
 - The Creator Contract MUST be [EIP-721](./eip-721.md) Compliant.
-- The Creator Contract MUST immplement the **metadata extension** specified in [EIP-721](./eip-721.md).
-- The Creator Token Holder MUST be process the copyright of the content that permits the issuing of the copy NFT.
+- The Creator Contract MUST implement the **metadata extension** specified in [EIP-721](./eip-721.md).
+- The Creator Token Holder MUST process the copyright of the content that permits the issuing of the copy NFT.
 - The Copy Contract MUST work with any Creator Contract.
 
 ### Usage
 
-- The token holder of the Creator Contract MAY set the mintable rule in the Copy Contract to specify the condition of mint a particular copy.
+- The token holder of the Creator Contract MAY set the mintable rule in the Copy Contract to specify the condition of minting a particular copy.
 - The mintable rule SHOULD call a particular implementation of Mintable Contract and set rules inside the Mintable Contract.
-- The creator MAY specifies states of the copy, such as transferable, extendable, revokable, updateable, statement in the Contract.
+- The creator MAY specifies states of the copy, such as transferable, extendable, revokable, updateable, the copyright statement in the Contract.
 
-- The Collector MUST fulfil the rules set by the Creator to obtain a copy.
-- The Collector MAY excecise the right specfied by the Creator, such as transferable, extendable, revokable, updateable, and the copyright - in the statement.
+- The Collector MUST fulfill the rules set by the Creator to obtain a copy.
+- The Collector MAY exercise the rights specified by the Creator, such as transferable, extendable, revokable, updateable, and the copyright statement.
 - The Collector SHOULD always reserve the right to destroy a copy.
 - The Creator MAY revoke a copy if the state revokable of the copy is true.
 
 ## Rationale
 
-This standard is designed to be as flexible as possible so that it can fulfil as much need as possible. 
+This standard is designed to be as flexible as possible so that it can fulfill as much needs as possible. 
 
-The Copy Contract permits minting of tokens that process the following charateristics:
+The Copy Contract permits the minting of tokens that process the following charateristics:
 - non-transferable: An SBT that is bound to a user's wallet address
 - revokable: creator has control over the minted copies. This is suitable for NFT that expresses follower relationship, or some kind of revokable permit
-- extendable: NFT is valid over a duration and requires extension. This is suitable for recurring membership.
+- extendable: NFT is valid over a duration and requires extension. This is suitable for recurring memberships.
 - updateable: Allows the copy NFT holder to update the NFT content when the creator NFT is updated
-- statement: Copyright transfer or other form of declaration from the Creator.
+- statement: Copyright transfer or other forms of declaration from the Creator.
 
-The Mintable Contract can be customised to enforce conditions for Collectors, including:
+The Mintable Contract can be customized to enforce conditions for Collectors, including:
 - Fee: Requires payment to mint
 - Free: No Condition to mint
 - NFT Holder: Process a particular NFT to mint
@@ -75,7 +75,7 @@ The Mintable Contract can be customised to enforce conditions for Collectors, in
 
 ### Design Reference
 
-1) [Lens Protocol Modules](https://github.com/lens-protocol/core): The Mintable Rule Design references the Lens Protocol Collect Modules in the set up of condition prior to minting.
+1) [Lens Protocol Modules](https://github.com/lens-protocol/core): The Mintable Rule Design references the Lens Protocol Collect Modules in the setup of conditions to be fulfilled before minting.
 
 ## Backwards Compatibility
 This standard is compatible with [EIP-721](./eip-721.md) and their extension.
@@ -102,12 +102,12 @@ interface IERC721Copy {
      * @dev Struct containing the information of the minted copy NFT
      *
      * @param creatorId The tokenId of the creator NFT that produces the original content
-     * @param extendAt The contract address that the user can go to when extending the expiration timestemp
+     * @param extendAt The contract address that the user can go to when extending the expiration timestamp
      * @param expiredAt The expiration timestamp of the nft token
      * @param transferable Indicates whether the token is transferable
      * @param updatable Indicates whether the token is updatable.
      *  User can update the contentUri of the copy token (copyUri) to the latest contentUri state of the creator token
-     * @param revokable Indicataes whether the token is recovable by the creator token holder
+     * @param revokable Indicates whether the token is revokable by the creator token holder
      * @param extendable Indicates whether the token can be extended beyond the deadline
      * @param copyURI Shows the contentUri copied from the creator token for collection purposes
      * @param statement The copyright declaration by the creator token holder. The declaration may include the rights that
@@ -292,7 +292,7 @@ pragma solidity 0.8.10;
 
 /**
  * @notice This is the interface of the Mintable Contract, the mintable contract specifies the rule for minting copies. 
- * Contracts that inherit the IMintable Interface can define their own rules. The creator will first specifies rules 
+ * Contracts that inherit the IMintable Interface can define their own rules. The creator will first specify rules 
  * using the setupRule function. Then, the collector can mint a copy with the isMintable function, or subsequently extend
  * the validity of the copy with the isExtendable function.
  */
@@ -304,7 +304,7 @@ interface IMintable {
      * @param duration The time duration that should add to the NFT token after mint
      * @param transferable Indicates whether the token is transferable
      * @param updatable Indicates whether the token is updatable.
-     * @param revokable Indicataes whether the token is recovable by the creator token holder
+     * @param revokable Indicates whether the token is recovable by the creator token holder
      * @param extendable Indicates whether the token can be extended beyond the deadline
      * @param statement The copyright declaration by the creator token holder
      * @param data Addition data that is required by the Mintable rule to pass. Should deserialize into variables specified
@@ -361,7 +361,7 @@ interface IMintable {
 The full implementation of the standard is given in the folder `../assets/eip-####/`.
 
 ## Security Considerations
-The expiry timestamp computation depends on the block timestamp which may not acurrately reflect the real world time. Please refrain from setting a overly low duration for the NFT.
+The expiry timestamp computation depends on the block timestamp which may not accurately reflect the real-world time. Please refrain from setting an overly low duration for the NFT.
 
 ## Copyright
 Copyright and related rights waived via [MIT](./LICENSE.md).
