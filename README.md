@@ -2,7 +2,7 @@
 eip: <to be assigned>
 title: Conditional Copy NFT
 description: NFT Copy Creation under conditions specfied by the creator
-author: Henry Yeung (@henrywfyeung), XB.eth
+author: Henry Yeung (@henrywfyeung), Xiao Ba <99x.capital@gmail.com>
 discussions-to: <URL>
 status: Draft
 type: Standards Track
@@ -21,7 +21,7 @@ The Collector, upon obtaining the token, will be able to use the token within th
 ## Motivation
 This standard solves the following problems
 
-- Copy Issuance of Unique Arkwork/Content: Professional Artists create arkworks that is unique. There could be multiple collectors who wants to keep a copy of their artworks. This standard serves as a tool to issue multiple copies of the same kind. The copies can be created with different functions and under different conditions. It gives sufficient flexibilty to both the Creator and the Collector.
+- Copy Issuance of Unique Artwork/Content: Professional Artists create arkworks that is unique. There could be multiple collectors who wants to keep a copy of their artworks. This standard serves as a tool to issue multiple copies of the same kind. The copies can be created with different functions and under different conditions. It gives sufficient flexibilty to both the Creator and the Collector.
 - Partial Copyright Transfer: This standard enables Creators to conditionally delegate the copyright, i.e. the right to produce derivative work, to the Collectors. There is no need to sell the original copy, i.e. creator token, in the market. The Creator can instead keep the token as a proof of authorship.
 
 People with the following usecases can consider applying this standard:
@@ -282,7 +282,8 @@ interface IERC721Copy {
      * @return string Returns the expiration timestamp of the token
      */
     function expireAt(uint256 tokenId) external view returns (uint64);
-}```
+}
+```
 
 ### The Mintable Interface
 
@@ -360,7 +361,7 @@ interface IMintable {
 The full implementation of the standard is given in the folder `../assets/eip-####/`.
 
 ## Security Considerations
-The expiry timestamp computation depends o the block timestamp which may not acurrately reflect the real world time. Please refrain from setting a overly low duration for the NFT.
+The expiry timestamp computation depends on the block timestamp which may not acurrately reflect the real world time. Please refrain from setting a overly low duration for the NFT.
 
 ## Copyright
 Copyright and related rights waived via [MIT](./LICENSE.md).
