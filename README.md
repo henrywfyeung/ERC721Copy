@@ -18,6 +18,8 @@ The Creator, who holds the original copy, can set up Mintable rules specifying t
 
 The Collector, upon obtaining the token, will be able to use the token within the boundaries set by the creator.
 
+![alt text](./assets/Diagram.png?raw=true)
+
 ## Motivation
 This standard solves the following problems.
 
