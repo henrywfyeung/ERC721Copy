@@ -254,6 +254,8 @@ interface IERC721Copy {
     function isExtendable(uint256 tokenId) external view returns (bool);
 
     /**
+     * @dev The copy NFT is expired if its expiration timestamp is less than the current timestamp. Expired tokens cannot be transferred, and can be revoked by the creator
+     *
      * @param tokenId The copy NFT token Id
      *
      * @return bool Returns a boolean indicating whether the token is is expired
